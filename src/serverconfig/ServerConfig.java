@@ -6,6 +6,8 @@ import java.util.NoSuchElementException;
 import config.Config;
 import utils.Attachment;
 import utils.Binding;
+import utils.Port;
+import utils.Type;
 
 public class ServerConfig {
 
@@ -34,6 +36,9 @@ public class ServerConfig {
 	private ConnectorSMD connectorSMD;
 
 	private Binding bindingCMtoConfig;
+	private Binding bindingConfigtoCM;
+	private Port portserverconfig_p;
+	private Port portserverconfig_r;
 
 	private ServerConfig() {
 		connectionManager = new ConnectionManager();
@@ -70,7 +75,11 @@ public class ServerConfig {
 		attachmentptor_smtod = new Attachment(securityManager.getPortsmtod_p(),
 				connectorSMD.getGluesmtod().getRequired());
 
-		// TODO create binding
+		// Create binding and ports
+		portserverconfig_p = new Port("portserverconfig_p", Type.PROVIDED, null);
+		portserverconfig_r = new Port("portserverconfig_r", Type.REQUIRED, null);
+		bindingCMtoConfig = new Binding(connectionManager.getPortcmserverconfig_p(), portserverconfig_p);
+		bindingConfigtoCM = new Binding(connectionManager.getPortcmserverconfig_r(), portserverconfig_r);
 	}
 
 	public static ServerConfig getInstance() throws NoSuchElementException, IllegalArgumentException, IOException {
@@ -167,5 +176,34 @@ public class ServerConfig {
 
 		// Call server receive function
 		connectionManager.receiveSecurityManager();
+	}
+
+	public void transmitConfigToCM() {
+		// Put the message in the connection manager required port
+		bindingConfigtoCM.getPortComponent().setMsg(bindingConfigtoCM.getPortConfiguration().getMsg());
+		
+		try {
+			connectionManager.sendSecurityManager(connectionManager.getPortcmserverconfig_r().getMsg());
+			securityManager.sendDatabase(securityManager.getPortcmtosm_r().getMsg());
+			database.sendConnectionManager(database.getPortsmtod_r().getMsg());
+		} catch (NoSuchElementException | IllegalArgumentException | IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public Port getPortserverconfig_p() {
+		return portserverconfig_p;
+	}
+
+	public void setPortserverconfig_p(Port portserverconfig_p) {
+		this.portserverconfig_p = portserverconfig_p;
+	}
+
+	public Port getPortserverconfig_r() {
+		return portserverconfig_r;
+	}
+
+	public void setPortserverconfig_r(Port portserverconfig_r) {
+		this.portserverconfig_r = portserverconfig_r;
 	}
 }

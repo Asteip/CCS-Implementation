@@ -11,12 +11,18 @@ public class ConnectionManager {
 	private Port portsmtocm_r;
 	private Port portcmtod_p;
 	private Port portdtocm_r;
+	
+	private Port portcmserverconfig_p;
+	private Port portcmserverconfig_r;
 
 	public ConnectionManager() {
 		portcmtosm_p = new Port("portcmtosm_p", Type.PROVIDED, null);
 		portsmtocm_r = new Port("portsmtocm_r", Type.REQUIRED, null);
 		portcmtod_p = new Port("portcmtod_p", Type.PROVIDED, null);
 		portdtocm_r = new Port("portdtocm_r", Type.REQUIRED, null);
+		
+		portcmserverconfig_p = new Port("portcmserverconfig_p", Type.PROVIDED, null);
+		portcmserverconfig_r = new Port("portcmserverconfig_r", Type.REQUIRED, null);
 	}
 	
 	public void sendSecurityManager(String msg) throws NoSuchElementException, IllegalArgumentException, IOException {
@@ -69,6 +75,22 @@ public class ConnectionManager {
 
 	public void setPortdtocm_r(Port portdtocm_r) {
 		this.portdtocm_r = portdtocm_r;
+	}
+
+	public Port getPortcmserverconfig_p() {
+		return portcmserverconfig_p;
+	}
+
+	public void setPortcmserverconfig_p(Port portcmserverconfig_p) {
+		this.portcmserverconfig_p = portcmserverconfig_p;
+	}
+
+	public Port getPortcmserverconfig_r() {
+		return portcmserverconfig_r;
+	}
+
+	public void setPortcmserverconfig_r(Port portcmserverconfig_r) {
+		this.portcmserverconfig_r = portcmserverconfig_r;
 	}
 
 }

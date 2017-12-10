@@ -25,7 +25,12 @@ public class Server {
 	public void receive() {
 		System.out.println("Message received from client : " + portctos_r.getMsg());
 		
-		// Add processes and response for client
+		try {
+			ServerConfig.getInstance().getPortserverconfig_r().setMsg(portctos_r.getMsg());
+			ServerConfig.getInstance().transmitConfigToCM();
+		} catch (NoSuchElementException | IllegalArgumentException | IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public Port getPortstoc_p() {
