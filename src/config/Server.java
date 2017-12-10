@@ -11,8 +11,6 @@ public class Server {
 	private Port portstoc_p;
 	private Port portctos_r;
 	
-	private ServerConfig serverConfig;
-	
 	public Server() {		
 		portstoc_p = new Port("portstoc_p", Type.PROVIDED, null);
 		portctos_r = new Port("portctos_r", Type.REQUIRED, null);
@@ -44,13 +42,5 @@ public class Server {
 
 	public void setPortctos_r(Port portctos_r) {
 		this.portctos_r = portctos_r;
-	}
-
-	public ServerConfig getServerConfig() {
-		return serverConfig;
-	}
-
-	public void setServerConfig(ServerConfig serverConfig) {
-		this.serverConfig = serverConfig;
 	}
 }
