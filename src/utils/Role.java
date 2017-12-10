@@ -32,6 +32,7 @@ public class Role {
 	}
 
 	public void setMsg(String msg) {
+		System.out.println("Role " + name + " has recieved the message : " + msg);
 		this.msg = msg;
 	}
 }

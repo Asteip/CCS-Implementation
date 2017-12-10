@@ -32,6 +32,7 @@ public class Port {
 	}
 
 	public void setMsg(String msg) {
+		System.out.println("Port " + name + " has recieved the message : " + msg);
 		this.msg = msg;
 	}
 }
