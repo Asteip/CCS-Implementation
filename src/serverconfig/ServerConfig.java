@@ -181,11 +181,36 @@ public class ServerConfig {
 	public void transmitConfigToCM() {
 		// Put the message in the connection manager required port
 		bindingConfigtoCM.getPortComponent().setMsg(bindingConfigtoCM.getPortConfiguration().getMsg());
+
+		if (!connectionManager.isActive()) {
+			try {
+				connectionManager.sendSecurityManager(connectionManager.getPortcmserverconfig_r().getMsg());
+				securityManager.receiveConnectionManager();
+				database.receiveSecurityManager();
+				securityManager.receiveDatabase();
+				connectionManager.receiveSecurityManager();
+
+				if (!connectionManager.isActive())
+					connectionManager.getPortcmserverconfig_p().setMsg("Connexion error.");
+				else
+					connectionManager.getPortcmserverconfig_p().setMsg("Connexion success.");
+
+			} catch (NoSuchElementException | IllegalArgumentException | IOException e) {
+				e.printStackTrace();
+			}
+		} else {
+			connectionManager.getPortcmserverconfig_p().setMsg("The message has been successfuly received !");
+		}
 		
+		// At the end, send the message to the server component
+		transmitCMToConfig();
+	}
+
+	public void transmitCMToConfig() {
+		// Put the message in the configuration provided port
+		bindingCMtoConfig.getPortConfiguration().setMsg(bindingCMtoConfig.getPortComponent().getMsg());
 		try {
-			connectionManager.sendSecurityManager(connectionManager.getPortcmserverconfig_r().getMsg());
-			securityManager.sendDatabase(securityManager.getPortcmtosm_r().getMsg());
-			database.sendConnectionManager(database.getPortsmtod_r().getMsg());
+			Config.getInstance().processConfigMessage();
 		} catch (NoSuchElementException | IllegalArgumentException | IOException e) {
 			e.printStackTrace();
 		}

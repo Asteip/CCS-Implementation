@@ -11,12 +11,17 @@ public class Database {
 	private Port portcmtod_r;
 	private Port portdtosm_p;
 	private Port portsmtod_r;
+	
+	private String password; 
 
 	public Database() {
 		portdtocm_p = new Port("portdtocm_p", Type.PROVIDED, null);
 		portcmtod_r = new Port("portcmtod_r", Type.REQUIRED, null);
 		portdtosm_p = new Port("portdtosm_p", Type.PROVIDED, null);
 		portsmtod_r = new Port("portsmtod_r", Type.REQUIRED, null);
+		
+		password = "topsecret";
+		
 	}
 	
 	public void sendConnectionManager(String msg) throws NoSuchElementException, IllegalArgumentException, IOException {
@@ -37,6 +42,13 @@ public class Database {
 
 	public void receiveSecurityManager() {
 		System.out.println("Message received from security manager : " + portsmtod_r.getMsg());
+		
+		try {
+			if(portsmtod_r.getMsg() == password)
+				sendSecurityManager("active_connection");
+		} catch (NoSuchElementException | IllegalArgumentException | IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public Port getPortdtocm_p() {

@@ -14,6 +14,8 @@ public class ConnectionManager {
 	
 	private Port portcmserverconfig_p;
 	private Port portcmserverconfig_r;
+	
+	private boolean isActive;
 
 	public ConnectionManager() {
 		portcmtosm_p = new Port("portcmtosm_p", Type.PROVIDED, null);
@@ -23,6 +25,8 @@ public class ConnectionManager {
 		
 		portcmserverconfig_p = new Port("portcmserverconfig_p", Type.PROVIDED, null);
 		portcmserverconfig_r = new Port("portcmserverconfig_r", Type.REQUIRED, null);
+		
+		isActive = false;
 	}
 	
 	public void sendSecurityManager(String msg) throws NoSuchElementException, IllegalArgumentException, IOException {
@@ -33,6 +37,10 @@ public class ConnectionManager {
 
 	public void receiveSecurityManager() {
 		System.out.println("Message received from security manager : " + portsmtocm_r.getMsg());
+		
+		if(portsmtocm_r.getMsg() == "active_connection") {
+			isActive = true;
+		}
 	}
 	
 	public void sendDatabase(String msg) throws NoSuchElementException, IllegalArgumentException, IOException {
@@ -91,6 +99,14 @@ public class ConnectionManager {
 
 	public void setPortcmserverconfig_r(Port portcmserverconfig_r) {
 		this.portcmserverconfig_r = portcmserverconfig_r;
+	}
+
+	public boolean isActive() {
+		return isActive;
+	}
+
+	public void setActive(boolean isActive) {
+		this.isActive = isActive;
 	}
 
 }

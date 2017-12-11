@@ -27,6 +27,12 @@ public class SecurityManager {
 
 	public void receiveConnectionManager() {
 		System.out.println("Message received from connection manager : " + portcmtosm_r.getMsg());
+		
+		try {
+			sendDatabase(portcmtosm_r.getMsg());
+		} catch (NoSuchElementException | IllegalArgumentException | IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void sendDatabase(String msg) throws NoSuchElementException, IllegalArgumentException, IOException {
@@ -37,6 +43,13 @@ public class SecurityManager {
 
 	public void receiveDatabase() {
 		System.out.println("Message received from database : " + portdtosm_r.getMsg());
+		
+		try {
+			if(portdtosm_r.getMsg() == "active_connection")
+				sendConnectionManager("active_connection");
+		} catch (NoSuchElementException | IllegalArgumentException | IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public Port getPortsmtocm_p() {

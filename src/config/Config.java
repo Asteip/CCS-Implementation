@@ -3,6 +3,7 @@ package config;
 import java.io.IOException;
 import java.util.NoSuchElementException;
 
+import serverconfig.ServerConfig;
 import utils.Attachment;
 
 public class Config {
@@ -71,6 +72,14 @@ public class Config {
 		
 		// Call the client receive function
 		client.receive();
+	}
+	
+	public void processConfigMessage() {
+		try {
+			server.send(ServerConfig.getInstance().getPortserverconfig_p().getMsg());
+		} catch (NoSuchElementException | IllegalArgumentException | IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public Client getClient() {

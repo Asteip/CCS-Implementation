@@ -16,7 +16,7 @@ public class Server {
 		portctos_r = new Port("portctos_r", Type.REQUIRED, null);
 	}
 
-	public void send(String msg) throws NoSuchElementException, IllegalArgumentException, IOException {
+	public void send(String msg) throws NoSuchElementException, IllegalArgumentException, IOException {		
 		System.out.println("Message sent from server : " + msg);
 		portstoc_p.setMsg(msg);
 		Config.getInstance().transmitStoC();
